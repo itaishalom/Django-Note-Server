@@ -29,8 +29,14 @@ def login_api(request):
             login(request, user)
             token, created = Token.objects.get_or_create(user=user)
             return Response(
-                {'success': True, 'message': 'Login successful', 'token': str(token)})
+                {'success': True, 'message': 'Login successful',
+                 'token': str(token)})
         else:
-            return Response({'success': False, 'message': 'Invalid username or password'}, status=400)
+            return Response(
+                {'success': False,
+                 'message': 'Invalid username or password'},
+                status=400)
 
-    return Response({'success': False, 'message': 'Only POST requests are allowed'}, status=405)
+    return Response(
+        {'success': False, 'message': 'Only POST requests are allowed'},
+        status=405)
