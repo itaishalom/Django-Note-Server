@@ -25,9 +25,11 @@ class UserSerializerTestCase(APITestCase):
 
 class UserCreateViewTestCase(APITestCase):
     def test_create_user_success(self):
-        user_data = {'username': 'testuser', 'password': 'testpassword', 'email': 'test@example.com'}
+        user_data = {'username': 'testuser', 'password': 'testpassword',
+                     'email': 'test@example.com'}
         user_data_reply = {'username': 'testuser', 'email': 'test@example.com'}
-        response = self.client.post(self.create_path(), user_data, format='json')
+        response = self.client.post(self.create_path(), user_data,
+                                    format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data, user_data_reply)
@@ -35,7 +37,8 @@ class UserCreateViewTestCase(APITestCase):
     def test_create_user_invalid_data(self):
         invalid_user_data = {'username': 'testuser', 'email': 'invalidemail'}
 
-        response = self.client.post(self.create_path(), invalid_user_data, format='json')
+        response = self.client.post(self.create_path(), invalid_user_data,
+                                    format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -47,7 +50,9 @@ class UserCreateViewTestCase(APITestCase):
 
 class LoginAPITestCase(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='testpassword', email='test@example')
+        self.user = User.objects.create_user(username='testuser',
+                                             password='testpassword',
+                                             email='test@example')
 
     def test_login_success(self):
         login_data = {'username': 'testuser', 'password': 'testpassword'}
@@ -64,10 +69,12 @@ class LoginAPITestCase(APITestCase):
 
     def test_login_invalid_credentials(self):
         # Invalid login credentials
-        invalid_login_data = {'username': 'testuser', 'password': 'invalidpassword'}
+        invalid_login_data = {'username': 'testuser',
+                              'password': 'invalidpassword'}
 
         # Make a POST request to login API with invalid credentials
-        response = self.client.post(self.login_path(), invalid_login_data, format='json')
+        response = self.client.post(self.login_path(), invalid_login_data,
+                                    format='json')
 
         # Check if login fails with 400 Bad Request status
         self.assertEqual(response.status_code, 400)

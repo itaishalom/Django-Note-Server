@@ -35,7 +35,8 @@ def list_notes(token, tag='', query=''):
     headers = {'Authorization': f'Token {token}'}
     params = {'tag': tag, 'query': query}
 
-    response = requests.get(BASE_URL + 'notes/', headers=headers, params=params)
+    response = requests.get(BASE_URL + 'notes/', headers=headers,
+                            params=params)
     print('List of Notes:')
     print(response.json())
     return response.json()
@@ -44,19 +45,22 @@ def list_notes(token, tag='', query=''):
 def fetch_all_notes(token, tag='', query=''):
     headers = {'Authorization': f'Token {token}'}
     params = {'tag': tag, 'query': query}
-    return iterate_over_notes_result([], params, path='notes/', headers=headers)
+    return iterate_over_notes_result([], params, path='notes/',
+                                     headers=headers)
 
 
 def fetch_all_notes_public(tag='', query=''):
     params = {'tag': tag, 'query': query}
-    return iterate_over_notes_result([], params, path='notes/public', headers={})
+    return iterate_over_notes_result([], params, path='notes/public',
+                                     headers={})
 
 
 def iterate_over_notes_result(notes, params, path, headers):
     page = 1
     while True:
         # Make a GET request to the API endpoint with pagination parameters
-        response = requests.get(BASE_URL + f'{path}?page={page}', params=params, headers=headers)
+        response = requests.get(BASE_URL + f'{path}?page={page}',
+                                params=params, headers=headers)
         status_code = response.status_code
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
@@ -87,7 +91,9 @@ def iterate_over_notes_result(notes, params, path, headers):
 def display_notes(notes):
     # Display notes
     for note in notes:
-        print(f'Note ID: {note["id"]}, Title: {note["title"]}, Body: {note["body"]}')
+        print(
+            f'Note ID: {note["id"]}, Title: {note["title"]}, Body: '
+            f'{note["body"]}')
 
 
 def delete(token, messages):
@@ -96,7 +102,8 @@ def delete(token, messages):
     headers = {'Authorization': f'Token {token}'}
     for message in messages:
         note_id = message['id']
-        response = requests.delete(BASE_URL + f'notes/{note_id}', headers=headers)
+        response = requests.delete(BASE_URL + f'notes/{note_id}',
+                                   headers=headers)
 
         # Processing the response
         if response.status_code == 204:
@@ -114,7 +121,8 @@ def add_note(token):
         'body': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         'tags': ['tag1']
     }
-    response = requests.post(BASE_URL + 'notes/', json=note_data, headers=headers)
+    response = requests.post(BASE_URL + 'notes/', json=note_data,
+                             headers=headers)
     print('Response from server:')
     print(response.json())
 
@@ -126,7 +134,8 @@ def update(token, note_id):
         'body': 'Lorem.',
         'tags': ['tag2']
     }
-    response = requests.put(BASE_URL + f'notes/{note_id}', json=note_data, headers=headers)
+    response = requests.put(BASE_URL + f'notes/{note_id}', json=note_data,
+                            headers=headers)
     print('Response from server:')
     print(response.json())
 
@@ -180,7 +189,6 @@ def main():
     [result, status] = fetch_all_notes(token)
     assert len(result) == 0
     assert status == 200
-
 
 
 if __name__ == "__main__":

@@ -1,6 +1,5 @@
 # notes/views.py
 from rest_framework import status, authentication, permissions
-from rest_framework.decorators import api_view
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -13,7 +12,8 @@ from .serializers import NoteSerializer
 
 def _validate_user(note, request):
     if note.user != request.user:
-        raise PermissionDenied("You do not have permission to update this note.")
+        raise PermissionDenied(
+            "You do not have permission to update this note.")
 
 
 def get_notes(self, filter_conditions, page_size, request, paginator):
@@ -60,7 +60,8 @@ class UserNotes(APIView):
         page_size, query, tag = get_params(request)
 
         filter_conditions = generate_filter(query, tag, Q(user=request.user))
-        return get_notes(self, filter_conditions, page_size, request, self.pagination_class())
+        return get_notes(self, filter_conditions, page_size, request,
+                         self.pagination_class())
 
     def post(self, request):
         note_data = extract_params(request)
@@ -102,8 +103,8 @@ class UserNotesPublic(APIView):
     def get(self, request):
         page_size, query, tag = get_params(request)
 
-        filter_conditions = generate_filter(query, tag, Q(privacy=Note.PRIVACY_CHOICES[0][0]))
-        return get_notes(self, filter_conditions, page_size, request, self.pagination_class())
-
-
-
+        filter_conditions = generate_filter(query, tag,
+                                            Q(privacy=Note.PRIVACY_CHOICES[0][
+                                                0]))
+        return get_notes(self, filter_conditions, page_size, request,
+                         self.pagination_class())
