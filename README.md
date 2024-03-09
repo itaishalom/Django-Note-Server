@@ -7,7 +7,8 @@ I have implemented everything, a few things that I would want to change in the f
 3. Tags array, for some reason returned as a comma-separated, by the tags search works with no problem
 4. Utilize Elasticsearch, it requires a NoSQL DB
 5. I think a better way to save public notes is on a different DB, rather than on the same DB with different values (public/private). Indexing accordingly may result in good query times, but I think it will be safer.
-
+6. Alongside the tests in the file tests, I wrote another e2e test to mimic a real client-backend flow because in my experience, sometimes the backend developer doesn't always understand how to frontend uses their API so in my opinion it is very important, check client_test.py.
+7. If I had more time, I would implement a Flutter app with this project.
 
 ### Application:
 
