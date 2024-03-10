@@ -9,7 +9,6 @@ class Note(models.Model):
         ('private', 'Private'),
     )
 
-    title2 = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
     body = models.TextField()
     tags = models.CharField(

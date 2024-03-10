@@ -1,11 +1,15 @@
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.authtoken.admin import User
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.test import APIClient
 
 from .models import Note
 from .serializers import NoteSerializer
 from django.test import TestCase
 from rest_framework.authtoken.models import Token
+
+from .utils import validate_user, generate_filter, calculate_word_count
 
 
 class NoteSerializerTestCase(TestCase):
@@ -121,3 +125,47 @@ class UserPublicNotesViewTests(TestCase):
         results = data['results']
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(results), 0)
+
+
+class NoteUtilsTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser',
+                                             password='testpassword')
+        self.note = Note.objects.create(title='Test Note',
+                                        body='This is a test note',
+                                        user=self.user)
+
+    def test_validate_user(self):
+        # Test valid user
+        self.assertIsNone(validate_user(self.note, self.user))
+
+        # Test invalid user
+        invalid_user = User.objects.create_user(username='invaliduser',
+                                                password='invalidpassword')
+        with self.assertRaises(PermissionDenied):
+            validate_user(self.note, invalid_user)
+
+    def test_generate_filter(self):
+        # Test with both query and tag
+        filter_conditions = generate_filter('query', 'tag',
+                                            Q(password__contains='pass'))
+
+        self.assertTrue('tags__contains' in str(filter_conditions))
+        self.assertTrue('body__icontains' in str(filter_conditions))
+        self.assertTrue('password__contains' in str(filter_conditions))
+
+        # Test with only test
+        filter_conditions = generate_filter('', '',
+                                            Q(test__contains='test', tag=None))
+        self.assertFalse('body__icontains' in str(filter_conditions))
+        self.assertTrue('test__contains' in str(filter_conditions))
+
+    def test_calculate_word_count(self):
+        content = "This is a test content."
+        self.assertEqual(calculate_word_count(content), 5)
+
+        content = ""
+        self.assertEqual(calculate_word_count(content), 0)
+
+        content = "Hello World!"
+        self.assertEqual(calculate_word_count(content), 2)
