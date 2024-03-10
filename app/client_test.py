@@ -160,9 +160,15 @@ def main():
     [result, status] = fetch_all_notes_public('')
     assert len(result) == 0
     assert status == 200
+
+    [result, status] = fetch_all_notes('')
+    assert len(result) == 0
+    assert status == 401
+
     token = login()
     [result, status] = fetch_all_notes(token)
     delete(token, result)
+    assert status == 200
 
     add_note(token)
     [result, status] = fetch_all_notes(token)
