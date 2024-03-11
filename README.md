@@ -10,7 +10,8 @@ I have implemented everything, a few things that I would want to change in the f
 6. Alongside the tests in the file tests, I wrote another e2e test to mimic a real client-backend flow because in my experience, sometimes the backend developer doesn't always understand how to frontend uses their API so in my opinion it is very important, check client_test.py (Also included a fail test).
 7. Extracted some business logic to the utils class, but if there is a need for more business logic, I would create a controller-like class to handle it, although Django follows an MTV pattern where the views act as controllers.
 8. I didn't create templates i.e. HTML files, just a backend.
-9. If I had more time, I would implement a Flutter app with this project.
+9. Add api Version v1/v2.. for future features and backwards compatibles.
+10. If I had more time, I would implement a Flutter app with this project.
 
 ### Application:
 
